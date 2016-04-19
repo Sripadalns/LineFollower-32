@@ -105,6 +105,8 @@ unsigned int read_ultrasound(){
             return TRIG_ERROR;
         }
     }
+    set_timer();
+	
     /*Case 2 : C2*/
     while((ECHO_PIN & (1<<ECHO_BIT))){    // while echo pin is still high
         if (((overFlowCounter*TIMER_MAX)+TCNT1) > SONAR_TIMEOUT){
