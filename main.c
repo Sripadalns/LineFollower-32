@@ -35,12 +35,12 @@ int main(){
         /*Call Echo Sensor and check that no blocks*/
 		distance_in_cm=read_ultrasound();
         		
-		if ( (distance_in_cm == TRIG_ERROR ) || (distance_in_cm == ECHO_ERROR))
+		if (distance_in_cm == TRIG_ERROR ) 
         {
            _delay_ms(DELAY_BETWEEN_TESTS);
         }
 		/*No Obstacles . So follow the line*/
-		else if(distance_in_cm > 5 )
+		else if( (distance_in_cm > 5 ) || (distance_in_cm == ECHO_ERROR) )
 		{
 		   /*There is no Line. So Stop*/
 		   if( (Left_Input == 0) && (Right_Input == 0) && (Mid_Input == 0) )
@@ -75,6 +75,24 @@ int main(){
 			  PORTC |= (1<< Left_Motor_En1)|(1<< Right_Motor_En1)|(1<< Left_Motor_En2);
 			  SetPWMDuty(0x4C,Right_Motor);
 			  SetPWMDuty(0,Left_Motor);
+		   }
+		   /*Right Curve. Run Left Motors at 30% Duty Cycle.Right Motor at 10 % Duty*/
+		   else if( (Left_Input == 0) && (Right_Input == 1) && (Mid_Input == 1) )
+		   {
+		      
+			  PORTC &= 0x0F;
+			  PORTC |= (1<< Left_Motor_En1)|(1<< Right_Motor_En1);
+			  SetPWMDuty(0x19,Right_Motor);
+			  SetPWMDuty(0x4C,Left_Motor);
+			  
+		   }
+		   /*Left Curve. Run Right Motors at 30% Duty Cycle.Left Motor at 0 % Duty*/
+		   else if( (Left_Input == 1) && (Right_Input == 0) && (Mid_Input == 1) )
+		   {
+		      PORTC &= 0x0F;
+			  PORTC |= (1<< Left_Motor_En1)|(1<< Right_Motor_En1);
+			  SetPWMDuty(0x4C,Right_Motor);
+			  SetPWMDuty(0x19,Left_Motor);
 		   }
 		   else
 		   {
